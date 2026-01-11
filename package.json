@@ -1,0 +1,25 @@
+{
+  "name": "url-expander-api",
+  "version": "1.0.0",
+  "description": "API to expand short URLs to their real destinations",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "url",
+    "expander",
+    "api",
+    "shorturl"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "next": "^16.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}
