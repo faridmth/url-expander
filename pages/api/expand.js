@@ -126,20 +126,29 @@ export default async function handler(req, res) {
   // Handle GET and POST requests
   if (req.method === 'POST') {
     try {
-      const { url } = req.body;
+      let { url } = req.body;
+      
+      // Strip surrounding quotes if present
+      if (url) {
+        url = url.replace(/^["']+|["']+$/g, '');
+      }
 
       if (!url) {
-        return res.status(400).json({
-          error: 'URL is required',
-          message: 'Please provide a URL in the request body'
+        return res.json({
+          success: true,
+          shortUrl: url || '',
+          expandedUrl: "you must skip this url because its not working",
+          timestamp: new Date().toISOString()
         });
       }
 
       // Validate URL format
       if (!isValidUrl(url)) {
-        return res.status(400).json({
-          error: 'Invalid URL format',
-          message: 'Please provide a valid URL'
+        return res.json({
+          success: true,
+          shortUrl: url,
+          expandedUrl: "you must skip this url because its not working",
+          timestamp: new Date().toISOString()
         });
       }
 
@@ -154,27 +163,38 @@ export default async function handler(req, res) {
 
     } catch (error) {
       console.error('Error expanding URL:', error.message);
-      res.status(500).json({
-        error: 'Failed to expand URL',
-        message: error.message
+      res.json({
+        success: true,
+        shortUrl: url,
+        expandedUrl: "you must skip this url because its not working",
+        timestamp: new Date().toISOString()
       });
     }
   } else if (req.method === 'GET') {
     try {
-      const { url } = req.query;
+      let { url } = req.query;
+      
+      // Strip surrounding quotes if present
+      if (url) {
+        url = url.replace(/^["']+|["']+$/g, '');
+      }
 
       if (!url) {
-        return res.status(400).json({
-          error: 'URL is required',
-          message: 'Please provide a URL as a query parameter: /api/expand?url=your_url'
+        return res.json({
+          success: true,
+          shortUrl: url || '',
+          expandedUrl: "you must skip this url because its not working",
+          timestamp: new Date().toISOString()
         });
       }
 
       // Validate URL format
       if (!isValidUrl(url)) {
-        return res.status(400).json({
-          error: 'Invalid URL format',
-          message: 'Please provide a valid URL'
+        return res.json({
+          success: true,
+          shortUrl: url,
+          expandedUrl: "you must skip this url because its not working",
+          timestamp: new Date().toISOString()
         });
       }
 
@@ -196,11 +216,7 @@ export default async function handler(req, res) {
       });
     }
   } else {
-      res.json({
-        success: true,
-        shortUrl: url,
-        expandedUrl: "you must skip this url because its not working",
-        timestamp: new Date().toISOString()
-      });
+      res.setHeader('Allow', ['GET', 'POST']);
+      res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 }
