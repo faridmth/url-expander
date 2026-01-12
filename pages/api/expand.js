@@ -125,8 +125,9 @@ function isValidUrl(string) {
 export default async function handler(req, res) {
   // Handle GET and POST requests
   if (req.method === 'POST') {
+    let url = '';
     try {
-      let { url } = req.body;
+      url = req.body?.url || '';
       
       // Strip surrounding quotes if present
       if (url) {
@@ -171,8 +172,9 @@ export default async function handler(req, res) {
       });
     }
   } else if (req.method === 'GET') {
+    let url = '';
     try {
-      let { url } = req.query;
+      url = req.query?.url || '';
       
       // Strip surrounding quotes if present
       if (url) {
